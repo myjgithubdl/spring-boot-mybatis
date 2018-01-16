@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.myj.study.mapper.UserMapper" >
+
+    <!--  描述如何将结果集映射到Java对象  -->
+    <resultMap id="userMap" type="com.myj.study.entity.User">
+        <result property="id" column="id" javaType="Integer" jdbcType="NUMERIC"></result>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+        <result property="age" column="age" javaType="Integer" jdbcType="NUMERIC"></result>
+        <result property="phoneNumber" column="phone_number" javaType="String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <insert id="save" parameterType="com.myj.study.entity.User">
+        insert into t_user(name , age , phone_number)
+        values(#{name,jdbcType=VARCHAR} , #{age,jdbcType=NUMERIC} , #{phoneNumber,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateById" parameterType="com.myj.study.entity.User">
+        update t_user set
+        name = #{name,jdbcType=VARCHAR} ,
+        age = #{age,jdbcType=NUMERIC},
+        phone_number = #{phoneNumber,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+    <delete id="deleteById">
+        delete from t_user where id = #{id,jdbcType=NUMERIC}
+    </delete>
+
+    <select id="selectById" resultMap="userMap">
+        select * from t_user where id = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="queryAll" resultMap="userMap">
+        select * from t_user
+    </select>
+
+    <select id="queryAllMap" resultType="java.util.Map"  parameterType="java.util.HashMap">
+        select * from t_user
+        WHERE 1=1
+        <if test="idGt != null and idGt !='' ">
+          AND  id > ${idGt}
+        </if>
+    </select>
+    
+    <sql id="queryAllMap2">
+        select * from t_user
+        WHERE 1=1
+        <if test="idGt != null and idGt !='' ">
+            AND  id > ${idGt}
+        </if>
+    </sql>
+
+</mapper>
